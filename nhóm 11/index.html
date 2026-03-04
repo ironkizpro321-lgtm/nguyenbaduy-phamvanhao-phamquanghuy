@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Duy Tech</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+    <div class="logo">🔥 Duy Tech</div>
+
+    <div class="search">
+        <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm...">
+    </div>
+
+    <div class="user">
+        <a href="auth.html" id="loginBtn">Đăng nhập</a>
+        <a href="#" id="logoutBtn" style="display:none;">Đăng xuất</a>
+        <a href="cart.html">🛒 Giỏ hàng (<span id="cartCount">0</span>)</a>
+    </div>
+</div>
+
+<!-- MENU -->
+<div class="menu">
+    <a href="#" data-category="all" class="active">Tất cả</a>
+    <a href="#" data-category="laptop">Laptop</a>
+    <a href="#" data-category="phukien">Phụ kiện</a>
+    <a href="#" data-category="linhkien">Linh kiện PC</a>
+    <a href="#" data-category="amthanh">Thiết bị âm thanh</a>
+    <a href="#" data-category="gaming">Gaming Gear</a>
+</div>
+
+<!-- PRODUCT -->
+<div class="section">
+    <h2>FLASH SALE</h2>
+    <div class="products"></div>
+</div>
+
+<script src="js/product.js"></script>
+</body>
+</html>
