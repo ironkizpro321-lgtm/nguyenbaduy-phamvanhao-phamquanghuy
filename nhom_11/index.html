@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TechStore - Chuyên Gia Công Nghệ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --primary: #ed1c24; /* ĐỎ GEARVN */
+            --primary-hover: #c41219;
+            --accent: #ed1c24;
+            --success: #10b981;
+            --dark: #1a1a1a; /* ĐEN GAMING */
+            --gray-bg: #f0f2f5; 
+            --text-main: #1e293b;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+        }
+
+        /* RESET & BASE */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Inter', 'Segoe UI', sans-serif; background: var(--gray-bg); color: var(--text-main); line-height: 1.6; overflow-x: hidden; }
+
+        /* PROMO BAR */
+        .promo-bar {
+            background: linear-gradient(90deg, #ed1c24, #1a1a1a);
+            color: white; padding: 8px 0; font-size: 13px; font-weight: 600; text-align: center;
+        }
+
+        /* HEADER */
+        .header { 
+            background: linear-gradient(135deg, #ed1c24, #b91c1c); color: white; padding: 1rem 5%; 
+            display: flex; align-items: center; justify-content: space-between; 
+            position: sticky; top: 0; z-index: 1000; box-shadow: var(--shadow);
+        }
+        
+        /* LOGO VIP PRO */
+        .logo { display: flex; align-items: center; gap: 8px; cursor: pointer; transition: 0.3s; user-select: none; }
+        .logo:hover { transform: translateY(-2px); }
+        .logo-mark {
+            background: #fff; color: var(--primary); width: 38px; height: 38px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
+            font-size: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transform: skewX(-10deg); transition: 0.3s; border: 2px solid #fde047;
+        }
+        .logo-mark i { transform: skewX(10deg); } /* Bù trừ độ nghiêng cho icon */
+        .logo:hover .logo-mark { transform: skewX(0deg) scale(1.05); background: #fde047; color: var(--dark); border-color: #fff; }
+        .logo-type { 
+            font-size: 1.6rem; font-weight: 900; color: #fff; text-transform: uppercase; 
+            letter-spacing: -0.5px; line-height: 1; margin-top: 2px;
+            position: relative; overflow: hidden; /* Cắt vệt sáng không cho lọt ra ngoài chữ */
+        }
+        .logo-type span { color: #fde047; font-weight: 900; }
+        
+        /* HIỆU ỨNG QUÉT SÁNG (SWEEP LIGHT) */
+        .logo-type::after {
+            content: ''; position: absolute; top: 0; left: -100%; width: 40px; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+            transform: skewX(-25deg); animation: logoSweep 3s infinite;
+        }
+        @keyframes logoSweep { 0% { left: -50px; } 20% { left: 120%; } 100% { left: 120%; } }
+
+        .search-box { flex: 0 1 500px; display: flex; background: white; border-radius: 4px; overflow: hidden; }
+        .search-box input { flex: 1; padding: 10px 20px; border: none; outline: none; width: 100%; }
+        .search-btn { background: #333; color: white; border: none; padding: 0 15px; cursor: pointer; }
+
+        .header-right { display: flex; gap: 20px; align-items: center; }
+
+        /* GIỎ HÀNG ICON */
+        .cart-wrapper { position: relative; cursor: pointer; font-size: 22px; transition: 0.2s; }
+        #cart-count {
+            position: absolute; top: -8px; right: -12px;
+            background: var(--dark); color: white; border-radius: 50%;
+            min-width: 20px; height: 20px; display: flex;
+            align-items: center; justify-content: center; font-size: 11px;
+            font-weight: bold; border: 2px solid var(--primary);
+        }
+
+        /* NAVIGATION */
+        .sub-nav { 
+            display: flex; justify-content: center; gap: 5px; padding: 5px; background: white; 
+            border-bottom: 2px solid var(--primary); position: sticky; top: 72px; z-index: 999;
+            flex-wrap: wrap; 
+        }
+        .sub-nav button { 
+            border: none; background: white; font-weight: 700; color: #444; 
+            cursor: pointer; padding: 12px 20px; transition: 0.2s; font-size: 13px; text-transform: uppercase;
+        }
+        .sub-nav button:hover { color: var(--primary); background: #fff5f5; }
+
+        /* --- THÊM STYLE LỌC GIÁ --- */
+        .price-filter-group {
+            display: flex; align-items: center; gap: 10px; margin-left: 20px;
+            padding-left: 20px; border-left: 1px solid #ddd;
+        }
+        .price-filter-group select {
+            padding: 8px 12px; border-radius: 4px; border: 1px solid #ddd;
+            font-family: inherit; font-size: 12px; font-weight: 700; cursor: pointer;
+            outline: none; background: #f8fafc; transition: 0.2s;
+        }
+        .price-filter-group select:hover { border-color: var(--primary); }
+
+        /* --- QUẢNG CÁO SLIDESHOW --- */
+        .hero-section {
+            max-width: 1400px; margin: 20px auto; padding: 0 5%;
+            display: grid; grid-template-columns: 2fr 1fr; gap: 15px;
+        }
+        .main-slider {
+            position: relative; border-radius: 8px; overflow: hidden; height: 350px; background: #fff;
+            box-shadow: var(--shadow);
+        }
+        .main-slider img, .side-banners img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.5s ease-in-out; }
+        
+        /* Nút điều khiển mũi tên */
+        .slider-controls {
+            position: absolute; top: 50%; left: 0; width: 100%; transform: translateY(-50%);
+            display: flex; justify-content: space-between; padding: 0 15px; opacity: 0; transition: 0.3s;
+        }
+        .main-slider:hover .slider-controls { opacity: 1; }
+        .slider-controls button {
+            background: rgba(255,255,255,0.8); border: none; width: 40px; height: 40px; border-radius: 50%;
+            cursor: pointer; font-size: 18px; color: var(--dark); transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .slider-controls button:hover { background: white; color: var(--primary); transform: scale(1.1); }
+
+        .side-banners { display: flex; flex-direction: column; gap: 10px; }
+        .side-banners img { height: 170px; border-radius: 8px; object-fit: cover; box-shadow: var(--shadow); cursor: pointer; transition: 0.3s; }
+        .side-banners img:hover { transform: scale(1.02); }
+
+        /* --- DANH MỤC NHANH --- */
+        .quick-categories {
+            display: flex; justify-content: center; gap: 40px; background: white;
+            max-width: 1400px; margin: 0 auto 25px auto; padding: 25px; border-radius: 16px; box-shadow: var(--shadow);
+        }
+        .cat-item { display: flex; flex-direction: column; align-items: center; gap: 12px; cursor: pointer; transition: 0.3s; width: 100px; }
+        .cat-item:hover { color: var(--primary); }
+        .cat-icon { 
+            width: 65px; height: 65px; background: #f8fafc; border-radius: 20px; 
+            display: flex; align-items: center; justify-content: center; font-size: 26px; border: 1px solid #e2e8f0; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .cat-item:hover .cat-icon { background: linear-gradient(135deg, var(--primary), #b91c1c); color: white; border-color: transparent; box-shadow: 0 10px 20px rgba(237, 28, 36, 0.3); transform: translateY(-5px) scale(1.05); }
+        .cat-item span { font-size: 13px; font-weight: 700; text-align: center; }
+
+        /* HERO PROMO AREA */
+        .promo-section { width: 100%; margin-bottom: 20px; }
+        .promo-block { background: white; border-radius: 16px; padding: 25px; box-shadow: var(--shadow); margin-bottom: 30px; }
+        .promo-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .promo-title { font-size: 18px; font-weight: 800; text-transform: uppercase; display: flex; align-items: center; gap: 10px; }
+
+        /* MAIN CONTAINER */
+        .main-container { display: grid; grid-template-columns: 280px 1fr; gap: 25px; padding: 0 5% 25px 5%; max-width: 1600px; margin: 0 auto; }
+        
+        /* SIDEBAR */
+        .sidebar { background: white; border-radius: 16px; padding: 20px; height: fit-content; position: sticky; top: 140px; box-shadow: var(--shadow); }
+        .sidebar-item { display: flex; align-items: center; gap: 12px; padding: 12px; cursor: pointer; border-radius: 6px; font-weight: 600; transition: 0.2s; color: #444; }
+        .sidebar-item:hover { background: #fff5f5; color: var(--primary); transform: translateX(5px); }
+
+        /* PRODUCT GRID */
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 20px; }
+        
+        .card { 
+            background: white; border-radius: 16px; padding: 15px; border: 1px solid #f1f5f9; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; flex-direction: column; position: relative; overflow: hidden;
+        }
+        .card:hover { box-shadow: 0 20px 40px rgba(0,0,0,0.08); border-color: var(--primary); transform: translateY(-8px); }
+        .card img { transition: 0.5s; width: 100%; height: 200px; object-fit: contain; cursor: pointer; }
+        .card:hover img { transform: scale(1.1); }
+
+        /* MODAL */
+        .modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); }
+        .modal-content { background: white; margin: 8vh auto; padding: 30px; border-radius: 20px; position: relative; animation: modalFade 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 25px 50px rgba(0,0,0,0.25); }
+        @keyframes modalFade { from { opacity: 0; transform: translateY(-40px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        
+        .close-modal { position: absolute; right: 20px; top: 15px; font-size: 28px; cursor: pointer; color: #94a3b8; }
+        .btn-auth { width: 100%; padding: 14px; background: var(--dark); color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; margin-top: 10px; transition: 0.2s; }
+        .btn-auth:hover { background: var(--primary); }
+
+        .tab-btn.active { border-bottom: 3px solid var(--primary); color: var(--primary) !important; }
+
+        /* FOOTER */
+        footer { background: white; padding: 40px 5%; border-top: 2px solid var(--primary); margin-top: 40px; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; max-width: 1400px; margin: 0 auto; }
+        .footer-col h4 { margin-bottom: 15px; color: var(--primary); text-transform: uppercase; }
+        .footer-col p { font-size: 13px; color: #666; margin-bottom: 8px; }
+
+        /* --- TỐI ƯU HÓA HIỂN THỊ TRÊN ĐIỆN THOẠI --- */
+        @media (max-width: 992px) {
+            .main-container { display: flex !important; flex-direction: column; padding: 0 15px; margin-top: 10px; }
+            .sidebar { position: static; display: flex; flex-wrap: wrap; padding: 15px; gap: 10px; }
+            .sidebar p { width: 100%; text-align: center; }
+            .sidebar-item { flex: 1; min-width: 120px; justify-content: center; font-size: 13px; }
+            .hero-section { display: flex; flex-direction: column; }
+            .side-banners { flex-direction: row; }
+            .side-banners img { flex: 1; height: 120px; }
+            .main-slider { height: 200px; }
+            .quick-categories { flex-wrap: wrap; gap: 15px; padding: 15px; }
+            .cat-item { width: 80px; }
+            .cat-icon { width: 50px; height: 50px; font-size: 20px; }
+            .logo-type { font-size: 1.4rem; }
+            .logo-mark { width: 32px; height: 32px; font-size: 16px; border-width: 1px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="promo-bar">
+        ⚡ TECHSTORE X EXCLUSIVE: Nhập mã <span style="color: #fde047;">TECHSTORE2026</span> giảm ngay 10% đơn hàng! ⚡
+    </div>
+
+    <!-- THANH THÔNG BÁO HỆ THỐNG -->
+    <div id="system-notice-bar" style="background: #fffbeb; color: #d97706; padding: 8px 0; font-size: 14px; font-weight: bold; display: none; border-bottom: 1px solid #fde68a;">
+        <marquee scrollamount="10" id="system-notice-text"></marquee>
+    </div>
+
+    <header class="header">
+        <!-- Nút Hamburger chỉ hiển thị trên mobile -->
+        <button class="hamburger-menu" id="hamburger-btn">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <div class="logo" onclick="location.reload()">
+            <div class="logo-mark"><i class="fas fa-microchip"></i></div>
+            <div class="logo-type">TECH<span>STORE</span></div>
+        </div>
+        
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Bạn muốn mua gì?..." oninput="searchProducts()">
+            <button class="search-btn" onclick="searchProducts()"><i class="fas fa-search"></i></button>
+        </div>
+
+        <div class="header-right">
+            <button id="theme-toggle" onclick="toggleTheme()" title="Chế độ Tối/Sáng" style="background: rgba(255,255,255,0.2); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: 0.3s;">
+                <i class="fas fa-moon"></i>
+            </button>
+            <div id="auth-section">
+                <button onclick="toggleModal('auth-modal')" style="background: rgba(255,255,255,0.2); color: white; border: none; padding: 10px 22px; border-radius: 4px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-user-circle"></i> <span>Tài khoản</span>
+                </button>
+            </div>
+            
+            <div class="cart-wrapper" id="cart-btn" onclick="toggleModal('cart-modal')">
+                <i class="fas fa-shopping-cart" style="font-size: 22px;"></i>
+                <span id="cart-count">0</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Lớp phủ cho menu mobile -->
+    <div class="nav-overlay"></div>
+
+    <nav class="sub-nav">
+        <button onclick="filterProduct('all')"><i class="fas fa-bars"></i> Tất cả</button>
+        <button onclick="filterProduct('laptop')"><i class="fas fa-laptop"></i> Laptop</button>
+        <button onclick="filterProduct('pc')"><i class="fas fa-desktop"></i> PC Gaming</button>
+        <button onclick="filterProduct('phone')"><i class="fas fa-mobile-alt"></i> Mobile</button>
+        <button onclick="filterProduct('component')"><i class="fas fa-microchip"></i> Linh kiện</button>
+        <button onclick="filterProduct('gear')"><i class="fas fa-keyboard"></i> Gaming Gear</button>
+
+        <div class="price-filter-group">
+            <select id="sort-brand" onchange="handleFilterAndSort()">
+                <option value="all">Tất cả hãng</option>
+                <option value="apple">Apple</option>
+                <option value="samsung">Samsung</option>
+                <option value="asus">Asus</option>
+                <option value="msi">MSI</option>
+                <option value="logitech">Logitech</option>
+                <option value="razer">Razer</option>
+            </select>
+            <select id="sort-price" onchange="handleFilterAndSort()">
+                <option value="all">Khoảng giá</option>
+                <option value="under-10">Dưới 10 Triệu</option>
+                <option value="10-25">10 - 25 Triệu</option>
+                <option value="above-25">Trên 25 Triệu</option>
+            </select>
+            <select id="order-price" onchange="handleFilterAndSort()">
+                <option value="none">Sắp xếp</option>
+                <option value="asc">Giá thấp → cao</option>
+                <option value="desc">Giá cao → thấp</option>
+            </select>
+        </div>
+    </nav>
+
+    <div id="home-view">
+    <div class="hero-section">
+        <div class="main-slider">
+            <img src="https://images.unsplash.com/photo-1600861194942-f883de0dfe96?q=80&w=1470&auto=format&fit=crop" id="slider-img" alt="Quảng cáo chính" onclick="filterAndScroll('pc')" style="cursor: pointer;">
+            <div class="slider-controls">
+                <button onclick="prevSlide()"><i class="fas fa-chevron-left"></i></button>
+                <button onclick="nextSlide()"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+        <div class="side-banners">
+            <img src="https://images.unsplash.com/photo-1605236453806-6ff36851218e?q=80&w=500&auto=format&fit=crop" id="side-img-1" alt="Banner phụ 1" onclick="filterAndScroll('phone')" style="cursor: pointer;">
+            <img src="https://images.unsplash.com/photo-1595225476474-87563907a212?q=80&w=500&auto=format&fit=crop" id="side-img-2" alt="Banner phụ 2" onclick="filterAndScroll('gear')" style="cursor: pointer;">
+        </div>
+    </div>
+
+    <div class="quick-categories">
+        <div class="cat-item" onclick="filterProduct('all')">
+            <div class="cat-icon"><i class="fas fa-layer-group"></i></div>
+            <span>Tất cả</span>
+        </div>
+        <div class="cat-item" onclick="filterProduct('laptop')">
+            <div class="cat-icon"><i class="fas fa-laptop"></i></div>
+            <span>Laptop</span>
+        </div>
+        <div class="cat-item" onclick="filterProduct('pc')">
+            <div class="cat-icon"><i class="fas fa-desktop"></i></div>
+            <span>PC Gaming</span>
+        </div>
+        <div class="cat-item" onclick="filterProduct('phone')">
+            <div class="cat-icon"><i class="fas fa-mobile-alt"></i></div>
+            <span>Điện thoại</span>
+        </div>
+        <div class="cat-item" onclick="filterProduct('gear')">
+            <div class="cat-icon"><i class="fas fa-keyboard"></i></div>
+            <span>Gear</span>
+        </div>
+        <div class="cat-item" onclick="filterProduct('component')">
+            <div class="cat-icon"><i class="fas fa-microchip"></i></div>
+            <span>Linh kiện</span>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <p style="font-size: 11px; font-weight: 800; color: #94a3b8; margin-bottom: 15px; letter-spacing: 1px; border-bottom: 1px solid #eee; padding-bottom: 5px;">HỖ TRỢ KHÁCH HÀNG</p>
+            <div class="sidebar-item" onclick="showHistory()"><i class="fas fa-box" style="color: var(--primary);"></i><span>Đơn hàng của tôi</span></div>
+            <div class="sidebar-item" onclick="showBalanceHistory()"><i class="fas fa-wallet" style="color: #10b981;"></i><span>Nạp tiền vào ví</span></div>
+            <div class="sidebar-item" onclick="alert('Hotline: 1800 1234')"><i class="fas fa-headset" style="color: #2563eb;"></i><span>Tư vấn Build PC</span></div>
+        </aside>
+
+        <div style="flex: 1; display: flex; flex-direction: column;">
+            <div class="promo-section">
+                <div class="promo-block" style="border-top: 4px solid var(--primary);">
+                    <div class="promo-header">
+                        <div class="promo-title flash-sale-title" style="color: var(--primary);"><i class="fas fa-bolt"></i> Flash Sale Giảm Sốc</div>
+                        <div id="countdown" style="background: var(--dark); color: white; padding: 5px 12px; border-radius: 4px; font-family: monospace; font-size: 16px;">02:59:59</div>
+                    </div>
+                    <div id="flash-sale-list" class="product-grid"></div>
+                </div>
+
+                <div class="promo-block" style="border-top: 4px solid #2563eb;">
+                    <div class="promo-header">
+                        <div class="promo-title best-seller-title" style="color: #2563eb;"><i class="fas fa-fire"></i> Sản phẩm bán chạy</div>
+                    </div>
+                    <div id="best-seller-list" class="product-grid"></div>
+                </div>
+            </div>
+
+            <main id="product-list" class="product-grid"></main>
+            <div id="pagination-controls" class="pagination"></div>
+        </div>
+    </div>
+    </div>
+
+    <div id="product-detail-view" style="display: none; max-width: 1400px; margin: 20px auto; padding: 0 5%;"></div>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>Về TechStore</h4>
+                <p>Hệ thống bán lẻ PC & Gear hàng đầu.</p>
+                <p>Email: hotro@techstore.com</p>
+            </div>
+            <div class="footer-col">
+                <h4>Chính sách</h4>
+                <p>Bảo hành 24 tháng</p>
+                <p>Đổi trả trong 30 ngày</p>
+            </div>
+            <div class="footer-col">
+                <h4>Tổng đài</h4>
+                <p>Mua hàng: 1800 1234</p>
+                <p>Khiếu nại: 1800 5678</p>
+            </div>
+        </div>
+    </footer>
+
+    <div id="toast-container" style="position: fixed; bottom: 30px; left: 30px; z-index: 10000; display: flex; flex-direction: column-reverse; gap: 12px;"></div>
+
+    <button id="back-to-top" onclick="scrollToTop()">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <div id="auth-modal" class="modal">
+        <div class="modal-content" style="width: 400px; max-width: 95%;">
+            <span class="close-modal" onclick="toggleModal('auth-modal')">&times;</span>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <h2 style="color: var(--primary);"><i class="fas fa-shield-alt"></i> TÀI KHOẢN</h2>
+            </div>
+            <div style="display: flex; border-bottom: 2px solid #f1f5f9; margin-bottom: 20px;">
+                <button class="tab-btn active" id="tab-login" onclick="switchTab('login')" style="flex: 1; padding: 10px; border: none; background: none; cursor: pointer; font-weight: bold; font-size: 15px; color: var(--primary);">ĐĂNG NHẬP</button>
+                <button class="tab-btn" id="tab-reg" onclick="switchTab('reg')" style="flex: 1; padding: 10px; border: none; background: none; cursor: pointer; font-weight: bold; font-size: 15px; color: #94a3b8;">ĐĂNG KÝ</button>
+            </div>
+            <form id="login-form" onsubmit="handleLogin(event)">
+                <input type="text" id="login-email" placeholder="Nhập Email hoặc Tên đăng nhập Admin" required style="width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #e2e8f0; border-radius: 8px; outline: none;">
+                <input type="password" id="login-pass" placeholder="Nhập Mật khẩu" required style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #e2e8f0; border-radius: 8px; outline: none;">
+                <button type="submit" class="btn-auth">ĐĂNG NHẬP</button>
+            </form>
+            <form id="register-form" style="display: none;" onsubmit="handleRegister(event)">
+                <input type="text" id="reg-name" placeholder="Tên hiển thị (Ví dụ: TuanNguyen)" required style="width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #e2e8f0; border-radius: 8px; outline: none;">
+                <input type="email" id="reg-email" placeholder="Email đăng ký" required style="width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #e2e8f0; border-radius: 8px; outline: none;">
+                <input type="password" id="reg-pass" placeholder="Mật khẩu (ít nhất 6 ký tự)" required minlength="6" style="width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #e2e8f0; border-radius: 8px; outline: none;">
+                <input type="password" id="reg-repass" placeholder="Nhập lại mật khẩu" required minlength="6" style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #e2e8f0; border-radius: 8px; outline: none;">
+                <button type="submit" class="btn-auth" style="background: var(--success);">TẠO TÀI KHOẢN</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="cart-modal" class="modal">
+        <div class="modal-content" style="width: 500px; max-width: 95%;">
+            <span class="close-modal" onclick="toggleModal('cart-modal')">&times;</span>
+            <h2 style="border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; margin-bottom: 15px; color: var(--primary);"><i class="fas fa-shopping-cart"></i> Giỏ hàng</h2>
+            <div id="cart-items-list"></div>
+            <div id="cart-total-container" style="border-top: 2px solid #f1f5f9; padding-top: 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-weight: bold;">Tổng cộng:</span>
+                    <span id="cart-total">0đ</span>
+                </div>
+                <button onclick="openCheckout()" class="btn-auth" style="background: var(--primary); margin-top: 15px;">THANH TOÁN</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="detail-modal" class="modal">
+        <div class="modal-content" style="width: 900px; max-width: 95%;">
+            <span class="close-modal" onclick="toggleModal('detail-modal')">&times;</span>
+            <div id="detail-content"></div>
+        </div>
+    </div>
+
+    <!-- WIDGET CHAT TRỰC TUYẾN -->
+    <button id="chat-widget-btn" onclick="toggleChat()">
+        <i class="fas fa-comments"></i>
+    </button>
+
+    <div id="chat-widget-window">
+        <div class="chat-header">
+            <span><i class="fas fa-headset"></i> CSKH TechStore</span>
+            <button onclick="toggleChat()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <div class="chat-msg bot">Xin chào! TechStore có thể giúp gì cho bạn hôm nay?</div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Nhập tin nhắn..." onkeypress="handleChatEnter(event)">
+            <button onclick="sendChatMessage()"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Firebase SDK (Sử dụng bản Compat để giữ nguyên cấu trúc JS hiện tại) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
+
+    <script src="product.js"></script>
+    <script src="config.js"></script>
+    <script src="functions.js"></script>
+    <script src="main.js"></script>
+
+</body>
+</html>
